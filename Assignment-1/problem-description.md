@@ -1,5 +1,5 @@
 ## Problem Statement
-To write a program which solves the **8-queen problem** with UCS (**universal cost search**) algorithm being used as the search algorithm. 
+To write a program which solves the **8-queen problem** with UCS (**uniform cost search**) algorithm being used as the search algorithm. 
 The program should solve for all the possible solutions of the problem.
 
 ## Problem Description
