@@ -22,11 +22,11 @@ struct state{
 
 typedef struct state state;
 
-state* open_list;
+vector <state*> open_list;
 
-state* closed_list;
+vector <state*> closed_list;
 
-void calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
+int calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 {
 	if(s->node_list.size()>=1)
 	{
@@ -50,22 +50,24 @@ void calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 
 		int curr_node=s->node_list[s->node_list.size()-1];
 
-		if(curr_node==s->starting_node)
-		{
-			return ;
-		}
+		
 
 		vector <vector <int> > b;
+	
+		int remain=no-s->node_list.size();
 
 		while(1)
 		{
 			int count=0;
-			int remain=no-s->node_list.size();
+		//	int remain=no-s->node_list.size();
+
+			b.resize(0);
 
 			for(int i=0;i<num;i++)
 			{
 				if(a[i]!=1)
 				{
+
 					count++;
 
 					b.resize(count);
@@ -83,6 +85,8 @@ void calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 
 			remain--;
 
+			curr_node=b[0][1];
+
 			if(remain==0)
 			{
 				s->heursitic_cost +=ct[curr_node][0];
@@ -90,11 +94,12 @@ void calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 				break;
 			}	
 
-			curr_node=b[0][1];
+		
 		}
 
 	}
 
+	return s->heursitic_cost;
 
 }
 
@@ -107,6 +112,8 @@ state* state_init(vector <vector <int> > &ct,int no,int node)
 	start->starting_node=node;
 
 	start->cost=0;
+
+	start->heursitic_cost=0;
 
 	start->node_list.push_back(node);
 
