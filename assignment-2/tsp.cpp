@@ -16,7 +16,7 @@ struct state{
 
 	//int num_nodes;
 
-	struct state* children;
+	vector <state*> children;
 
 };
 
@@ -119,13 +119,43 @@ state* state_init(vector <vector <int> > &ct,int no,int node)
 
 	calc_heurisitics(start,ct,no);
 
-	start->children=NULL;
-
 	return start;
 
 }
 
+int goal_test(state* s,int no)
+{
+  int	flag=0;
 
+	if(s->node_list.size()<no)
+	{
+		return 0;
+	}
+	else
+	{
+		if(s->node_list.size()==no)
+		{
+			
+			flag=1;
+		}
+	}
+		
+	//Add code to check if redudant nodes are filled to satisfy the s->node_list==no condition
+
+	return flag;
+}
+
+
+void print_tour(state* s)
+{
+	for(int i=0;i<s->node_list.size();i++)
+	{
+		cout<<s->node_list[i]<<" ";
+	}
+
+	cout<<"\n";	
+
+}
 
 int main()
 {
@@ -169,7 +199,90 @@ int main()
 
 	state* start=state_init(cost_table,number_nodes,0);
 
-	cout<<start->heursitic_cost<<"\n";
+	open_list.push_back(start);
+	
+	int flag=1;
+
+	while(flag)
+	{
+		state* temp=open_list[0];
+
+		flag=goal_test(temp,number_nodes);
+
+		if(flag==1)
+		{
+			print_tour(temp);
+
+			cout<<"\n"<<temp->cost<<"\n";
+
+			closed_list.push_back(temp);
+
+			open_list.erase(open_list.begin());
+
+			break;
+		}
+		else
+		{
+			if(temp->node_list.size() < number_nodes)
+			{
+				int a[number_nodes];
+
+				for(int i=0;i<number_nodes;i++)
+				{
+					a[i]=0;
+				}
+
+				for(int i=0;i<temp->node_list.size();i++)
+				{
+					a[temp->node_list[i]]=1;
+				}
+
+				for(int i=0;i<number_nodes;i++)
+				{
+					if(a[i]==0)
+					{
+						state* temp1=(state*) malloc(sizeof(start));
+
+						temp1->starting_node=temp->starting_node;
+
+						for(int j=0;j<temp->node_list.size();i++)
+						{
+							temp1->node_list.push_back(temp->node_list[i]);
+						}
+
+						temp1->node_list.push_back(i);
+
+		temp1->cost=temp->cost+cost_table[temp1->node_list[temp1->node_list.size()-1]][temp1->node_list[temp1->node_list.size()-2]];
+
+						calc_heurisitics(temp1,cost_table,number_nodes);	
+
+						temp->children.push_back(temp1);
+
+						open_list.push_back(temp1);
+
+					}
+				}
+			}
+
+			closed_list.push_back(temp);
+
+			open_list.erase(open_list.begin());
+
+			state* temp2=NULL;
+			
+			int min=open_list[0]->cost+open_list[0]->heursitic_cost;
+
+			for(int i=1;i<open_list.size();i++)
+			{
+				int c=open_list[i]->cost+open_list[0]->heursitic_cost;
+
+				if(c < min)
+				{
+				
+				}
+			}
+		}
+	}
 
 	return 0;
 }
