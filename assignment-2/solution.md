@@ -2,5 +2,8 @@
 
 ### Problem Statement
     
-    To solve the travelling salesman problem with A* algorithm being used as the searching algorithm. 
+    To solve the travelling salesman problem with A* algorithm being used as the searching algorithm.
+    
+### Solution Explanation    
+    
     
