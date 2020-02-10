@@ -255,17 +255,25 @@ int main()
 		{
 			cout<<"Found Solution\n";
 
-			temp->node_list.push_back(temp->starting_node);
+		//	temp->node_list.push_back(temp->starting_node);
 
 		//	temp->cost = temp->cost +cost_table[temp->node_list[temp->node_list.size()-1]][0];
 
-			print_tour(temp);
+		//	print_tour(temp);
 
-			cout<<"cost: "<<temp->cost<<"\n";
+//			cout<<"cost: "<<temp->cost<<"\n";
 
 			closed_list.push_back(temp);
 
 			open_list.erase(open_list.begin());
+
+			temp->node_list.push_back(temp->starting_node);
+
+			print_tour(temp);
+
+			int last_node=temp->node_list[number_nodes-1];
+
+			cout<<"Final cost: "<<temp->cost+cost_table[last_node][0]<<"\n";
 
 			break;
 		}
