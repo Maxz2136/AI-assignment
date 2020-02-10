@@ -38,6 +38,12 @@ int calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 
 		a[0]=1;
 
+/*		for(int i=0;i<s->node_list.size();i++)
+		{
+			cout<<s->node_list[i]<<" ";
+		}
+		cout<<"\n";
+*/
 		for(int i=1;i<num;i++)
 		{
 			a[i]=0;
@@ -50,7 +56,7 @@ int calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 
 		int curr_node=s->node_list[s->node_list.size()-1];
 
-		
+//		cout<<"heur\n";		
 
 		vector <vector <int> > b;
 	
@@ -63,9 +69,11 @@ int calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 
 			b.resize(0);
 
+//			cout<<"\n";
+
 			for(int i=0;i<num;i++)
 			{
-				if(a[i]!=1)
+				if(a[i]==0)
 				{
 
 					count++;
@@ -76,25 +84,49 @@ int calc_heurisitics(state* s,vector <vector <int> > &ct,int no)
 					b[count-1].push_back(i);
 				}
 			}
-
-			sort(b.begin(),b.end());
-
-			s->heursitic_cost +=b[0][0];
-
-			a[b[0][1]]=1;
-
-			remain--;
-
-			curr_node=b[0][1];
-
-			if(remain==0)
+				
+//			cout<<"here!!\n";
+			
+			if(b.size()!=0)
 			{
+
+				sort(b.begin(),b.end());
+			
+
+//				cout<<"too!\n";
+
+		//		cout<<b.size()<<"\n";
+
+				s->heursitic_cost +=b[0][0];
+			
+			//	cout<<"t!!\n";
+
+				a[b[0][1]]=1;
+
+			//	cout<<"ii!!\n";
+
+				remain--;
+				
+				curr_node=b[0][1];
+			
+		
+
+				if(remain==0)
+				{
+					s->heursitic_cost +=ct[curr_node][0];
+
+					break;
+				}	
+			
+			}
+
+			if(b.size()==0)
+			{
+
 				s->heursitic_cost +=ct[curr_node][0];
 
 				break;
-			}	
-
-		
+			}
 		}
 
 	}
@@ -198,22 +230,38 @@ int main()
 	}
 
 	state* start=state_init(cost_table,number_nodes,0);
+	
+	cout<<"\n"<<start->heursitic_cost<<"\n";
 
 	open_list.push_back(start);
 	
 	int flag=1;
+	
+	int y=0;
 
 	while(flag)
 	{
+//		cout<<++y<<"\n";
+
 		state* temp=open_list[0];
+
+		cout<<"cost "<<temp->cost<<"\n";
 
 		flag=goal_test(temp,number_nodes);
 
+	//	cout<<"y: "<<y<<"flag: "<<flag<<"\n";
+
 		if(flag==1)
 		{
+			cout<<"Found Solution\n";
+
+			temp->node_list.push_back(temp->starting_node);
+
+		//	temp->cost = temp->cost +cost_table[temp->node_list[temp->node_list.size()-1]][0];
+
 			print_tour(temp);
 
-			cout<<"\n"<<temp->cost<<"\n";
+			cout<<"cost: "<<temp->cost<<"\n";
 
 			closed_list.push_back(temp);
 
@@ -223,6 +271,16 @@ int main()
 		}
 		else
 		{
+		//	cout<<"number_nodes "<<number_nodes<<"\n";
+
+			for(int i=0;i<temp->node_list.size();i++)
+			{
+				cout<<temp->node_list[i]<<" ";
+			}
+			cout<<"\n";
+
+
+
 			if(temp->node_list.size() < number_nodes)
 			{
 				int a[number_nodes];
@@ -237,24 +295,32 @@ int main()
 					a[temp->node_list[i]]=1;
 				}
 
+/*				for(int i=0;i<number_nodes;i++)
+				{
+					cout<<a[i]<<" ";
+				}
+				cout<<"\n";
+*/
 				for(int i=0;i<number_nodes;i++)
 				{
 					if(a[i]==0)
 					{
-						state* temp1=(state*) malloc(sizeof(start));
+						state* temp1=(state*) malloc(sizeof(state));
 
 						temp1->starting_node=temp->starting_node;
 
-						for(int j=0;j<temp->node_list.size();i++)
+						for(int j=0;j<temp->node_list.size();j++)
 						{
-							temp1->node_list.push_back(temp->node_list[i]);
+							temp1->node_list.push_back(temp->node_list[j]);
 						}
 
 						temp1->node_list.push_back(i);
 
-		temp1->cost=temp->cost+cost_table[temp1->node_list[temp1->node_list.size()-1]][temp1->node_list[temp1->node_list.size()-2]];
+		temp1->cost=temp->cost+cost_table[temp1->node_list[temp1->node_list.size()-1]][temp1->node_list[temp1->node_list.size()-2]];				
 
-						calc_heurisitics(temp1,cost_table,number_nodes);	
+						calc_heurisitics(temp1,cost_table,number_nodes);
+
+//						cout<<"before\n";	
 
 						temp->children.push_back(temp1);
 
@@ -264,23 +330,60 @@ int main()
 				}
 			}
 
+//			cout<<"Reached here!!\n";
+
 			closed_list.push_back(temp);
 
 			open_list.erase(open_list.begin());
 
-			state* temp2=NULL;
+			if(open_list.size()==0)
+			{
+				break;
+			}
+
 			
 			int min=open_list[0]->cost+open_list[0]->heursitic_cost;
 
 			for(int i=1;i<open_list.size();i++)
 			{
-				int c=open_list[i]->cost+open_list[0]->heursitic_cost;
+				int c=open_list[i]->cost+open_list[i]->heursitic_cost;
 
 				if(c < min)
 				{
-				
+					min=c;					
 				}
 			}
+
+
+			vector <vector <int> > temp_list;
+
+			int cot=0;
+
+			for(int i=0;i<open_list.size();i++)
+			{
+				if((open_list[i]->cost+open_list[i]->heursitic_cost)==min)
+				{
+					cot++;
+
+					temp_list.resize(cot);
+
+					temp_list[cot-1].push_back(open_list[i]->cost);
+
+					temp_list[cot-1].push_back(i);
+				}
+			}
+
+
+			sort(temp_list.begin(),temp_list.end());
+
+			state* tp=open_list[temp_list[0][1]];
+
+			open_list[temp_list[0][1]]=open_list[0];
+
+			open_list[0]=tp;
+			
+			flag=1;
+			
 		}
 	}
 
