@@ -6,9 +6,13 @@
     
 ### Solution Explanation   
 
-The problem has to be defined before we can solve it.
+Since the search algorithm to be used should be A* algorithm,  so we should define our heuristic function which is a component of the A* algorithm. 
 
-To define the problem means to define it's state space.
+The heuristic function for the travelling salesman probem is the min-neighbour algorithm to find the sub-optimal path in TSP. 
+
+It means ,given a node, and we have to find the heuristic cost of the node. we calculate it in the given way.
+
+ 
 
 
     
