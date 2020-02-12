@@ -22,6 +22,17 @@ In the above image, let 0 node be the start node. So to calculate the heuristic 
 
 To understand the process, let's calculate the heursistic for node 0.
 
+The  edge connected with least edge weight is edge connecting node 0 and node 1 with egde weight 1. So, we choose this edge and travel to node 1 from node 0. So, now we have explored node 0 and **node 1**. Again, from node 1, path available are path of cost 1,4 and 3. We can't choose path with path cost 1 as this will lead to node 0 which is already explored.Also, node 0 is the start state, which should be reached again after only exploring every other node only once. So, now we are left with node of cost 4 and 3. So, 3 being the lower cost between the two,we choose path of cost 3 and move to **node 2**. Now similarly from node 2, we have the path choice of only path with path cost 7. So ,we choose this path and move to node 3. At this point, we have explored every node available in the **TSP**. So, now we move to starting node from node 3, which is node 0. This is done by moving through the path of path cost 5. 
+
+Therefore,total cost achieved is 1+3+7+5=16. 
+
+Thus 16 will be the heursitic cost for node 0. 
+
+Here, the heuristic cost calculated will be overestimating. This is because, the path cost calculated to reach goal state is calculated in a greedy way, which may give at best optimal solution or a sub-optimal solution, in every case. 
+
+
+
+
 
 
  
