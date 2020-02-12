@@ -16,6 +16,8 @@ The **heuristic function** used is defined as:
 ![](aiAssignment.png)
 
 
+
+
 In the above image, let 0 node be the start node. So to calculate the heuristic of the above diagram, we do it by travelling all the unexplored node only once and returning back to start node. We leave the current node by choosing the lowest cost edge available which leads to a unexplored edge. 
 
 To understand the process, let's calculate the heursistic for node 0.
