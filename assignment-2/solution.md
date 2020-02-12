@@ -44,8 +44,8 @@ For the above graph example,
 The edge weight input will be in the following format-
 
  -1 1 3 5    
- 1 -1 3 4
- 3 3 -1 7
+ 1 -1 3 4 
+ 3 3 -1 7 
  5 4 7 -1
 
 After this, output will be displayed in the format-
