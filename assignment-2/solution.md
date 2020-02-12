@@ -31,6 +31,26 @@ Thus 16 will be the heursitic cost for node 0.
 Here, the heuristic cost calculated will be overestimating. This is because, the path cost calculated to reach goal state is calculated in a greedy way, which may give at best optimal solution or a sub-optimal solution, in every case. 
 
 
+## Steps to follow while running the program
+
+ **1**>You can execute the program by executing the executing file or by compiling the .cpp file by running make command. Make sure makefile is present in the current directory where the cpp file (source code) is. 
+ 
+**2**> On executing the program, first thing the program asks is for the number of nodes we want for the **TSP** problem.
+
+**3**> Next, the program needs the user to insert the edge weights. In this program, the assumption is made that the start node is always marked as 0 and all other nodes are marked with distinct numbers from 1 to N-1, if N is the total number of nodes. Then we insert edge weights for each pair of nodes possible, starting with node 0 and pairing starts with node 0 and goes to node N-1. For the pair of self nodes, ie for eg- node 0 and node0, we insert -1 in that case.
+
+For the above graph example, 
+
+The edge weight input will be in the following format-
+
+-1 1 3 5
+1 -1 3 4
+3 3 -1 7
+5 4 7 -1
+
+
+
+
 
 
 
