@@ -33,7 +33,7 @@ Here, the heuristic cost calculated will be overestimating. This is because, the
 
 ## Steps to follow while running the program
 
- **1**>You can execute the program by executing the executing file or by compiling the .cpp file by running make command. Make sure makefile is present in the current directory where the cpp file (source code) is. 
+ **1**> You can execute the program by executing the executing file or by compiling the .cpp file by running make command. Make sure makefile is present in the current directory where the cpp file (source code) is. 
  
 **2**> On executing the program, first thing the program asks is for the number of nodes we want for the **TSP** problem.
 
@@ -48,7 +48,13 @@ The edge weight input will be in the following format-
 3 3 -1 7
 5 4 7 -1
 
+After this, output will be displayed in the format-
 
+0 ..... 0 along with the cost for the current ouput tour. 
+
+For in the above example, ouput will be
+
+0 2 1 3 0 and cost displayed will be **15**.
 
 
 
