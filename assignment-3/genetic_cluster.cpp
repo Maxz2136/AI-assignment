@@ -166,21 +166,21 @@ population crossover(population* populi,int number_of_students,int m,int k,vecto
 	crossover_population.cluster_list.resize(populi->population_size);
 	crossover_population.population_size = populi->population_size;
 
-	cout<<"\ntest1....\n";
+	//cout<<"\ntest1....\n";
 
 	for(int i=0;i<populi->population_size;i+=2)
 	{
-		cout<<"test2"<<" "<<i<<"\n";
+		//cout<<"test2"<<" "<<i<<"\n";
 		if((i+1)<populi->population_size)
 		{
-			cout<<"entered...\n";
+			//cout<<"entered...\n";
 			for(int j=0;j<=crossover_point;j++)
 			{
 				crossover_population.cluster_list[i].push_back(populi->cluster_list[i+1][j]);
 				crossover_population.cluster_list[i+1].push_back(populi->cluster_list[i][j]);
 			}
 
-			cout<<"test3\n";
+			//cout<<"test3\n";
 
 			for(int j=crossover_point+1;j<number_of_students;j++)
 			{
@@ -188,7 +188,7 @@ population crossover(population* populi,int number_of_students,int m,int k,vecto
 				crossover_population.cluster_list[i+1].push_back(populi->cluster_list[i+1][j]);
 			}
 
-			cout<<"test4\n";
+			//cout<<"test4\n";
 		}
 
 		if(i == populi->population_size - 1)
@@ -200,11 +200,11 @@ population crossover(population* populi,int number_of_students,int m,int k,vecto
 		}
 	}
 
-	cout<<"got out\n";
+	//cout<<"got out\n";
 
 	fitness_function(&crossover_population,number_of_students,m,k,arr);
 
-	cout<<"Evaluation done...\n";
+	//cout<<"Evaluation done...\n";
 
 	sort_population(&crossover_population);
 
@@ -212,9 +212,26 @@ population crossover(population* populi,int number_of_students,int m,int k,vecto
 }
 
 
-void mutation(population* populi)
+void mutation(population* populi,int n,int k)
 {
-	
+
+	cout<<"\nMUTATION HAPPENING....\n";
+
+	for(int i=0;i<populi->population_size/2;i++)
+	{
+		int population_number = rand() % populi->population_size;
+
+		int student_number1 = rand() % n;
+
+		int student_number2 = rand() % n;
+
+		int temp = populi->cluster_list[population_number][student_number1];
+
+		populi->cluster_list[population_number][student_number1] = populi->cluster_list[population_number][student_number2];
+
+		populi->cluster_list[population_number][student_number2] = temp;
+
+	}
 }
 
 int main()
@@ -286,6 +303,10 @@ int main()
 
 	bool selection_done=true;
 
+	int tick=1;
+
+	
+
 	while(selection_done)
 	{
 		selection_done=false;
@@ -333,6 +354,15 @@ int main()
 
 		//free(&crossover_population);
 
+		if(tick%4 == 0)
+		{
+			mutation(&populi,n,k);
+
+			fitness_function(&populi,n,m,k,arr);
+		}
+
+
+
 		sort_population(&populi);
 
 		sort(populi.fitness_value.begin(),populi.fitness_value.end());
@@ -342,8 +372,11 @@ int main()
 
 		sort(crossover_population.fitness_value.begin(),crossover_population. fitness_value.end());
 
+		tick++;
+
 	}
 
+	cout<<"COMPLETED IN tick: "<<tick<<"\n";
 
 	cout<<"FINAL POPULATION:\n";
 
