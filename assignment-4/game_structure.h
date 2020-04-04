@@ -13,6 +13,8 @@ struct game_state{
 
 	int game_mode;
 
+	int current_turn;
+
 };
 
 typedef struct game_state game;

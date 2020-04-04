@@ -31,6 +31,41 @@ void call_player(int turn_number,game* platform)
 	{
 		case 1: {
 
+				if(platform->first_turn_taken_by==1)
+				{
+					cout<<"Player1: ";
+					AI(platform);
+					platform->current_turn=1;
+				}
+				else
+				{
+					if(platform->game_mode==1)
+					{
+						cout<<"Player1: ";
+						AI(platform);
+					}
+					else
+					{
+						cout<<"Number of sticks you want to remove: ";
+						int temp;
+						while(1)
+						{
+							cin>>temp;
+							if(temp > platform->remaining_sticks)
+							{
+								cout<<"Can't remove "<<temp<<" sticks, not available\n";
+								cout<<"Please remove correct number of sticks!\n";
+								cout<<"Number of sticks you want to remove: ";
+							}
+							else
+							{
+								platform->remaining_sticks -=temp;
+								break;
+							}
+						}
+					}
+					platform->current_turn=2;
+				}
 			
 		}
 
@@ -38,8 +73,50 @@ void call_player(int turn_number,game* platform)
 
 		case 0: {
 
+					if(platform->first_turn_taken_by==1)
+					{
+						if(platform->game_mode==1)
+						{
+							cout<<"Player2: ";
+							AI(platform);
+						}
+						else
+						{
+							cout<<"Number of sticks you want to remove: ";
+							int temp;
+							while(1)
+							{
+								cin>>temp;
+								if(temp > platform->remaining_sticks)
+								{
+									cout<<"Can't remove "<<temp<<" sticks, not available\n";
+									cout<<"Please remove correct number of sticks!\n";
+									cout<<"Number of sticks you want to remove: ";
+								}
+								else
+								{
+									platform->remaining_sticks -=temp;
+									break;
+								}
+							}
+						}
+
+						platform->current_turn=2;
+					}
+					else
+					{
+						cout<<"Player2: ";
+						AI(platform);
+						platform->current_turn=1;
+					}
+
 		} 
 	}
+}
+
+void increment_turn(game* platform)
+{
+	platform->turn_number++;
 }
 
 int main()
@@ -101,11 +178,13 @@ int main()
 		{
 			cout<<"You won the toss\nYou will play the first turn\n";
 			platform.first_turn_taken_by=2;
+			platform.current_turn=platform.first_turn_taken_by;
 		}
 		else
 		{
 			cout<<"You lose the toss\nAI (Player 1) will play the first turn\n";
 			platform.first_turn_taken_by=1;
+			platform.current_turn=platform.first_turn_taken_by;
 		}
 	}
 	else
@@ -116,19 +195,31 @@ int main()
 		{
 			cout<<"You won the toss\nYou will play the first turn\n";
 			platform.first_turn_taken_by=2;
+			platform.current_turn = platform.first_turn_taken_by;
 		}
 		else
 		{
 			cout<<"You lose the toss\nAI (Player 1) will play the first turn\n";
 			platform.first_turn_taken_by=1;
+			platform.current_turn = platform.first_turn_taken_by;
 		}
 	}
 
 	platform.turn_number=1;
 
-	//while(platform.remaining_sticks!=0)
+	while(platform.remaining_sticks!=0)
 	{
-		AI(&platform);
+		call_player(platform.turn_number,&platform);
+		increment_turn(&platform);
+	}
+
+	if(platform.current_turn==platform.first_turn_taken_by)
+	{
+		cout<<"Second Player Wins\n";
+	}
+	else
+	{
+		cout<<"First Player Wins\n";
 	}
 
 	return 0;

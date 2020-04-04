@@ -357,11 +357,11 @@ void AI(game* platform)
 
 	evaluate_utility(game_tree);
 
-	display_game_tree(game_tree);
+	//display_game_tree(game_tree);
 
 	int remove_sticks = sticks_to_be_removed(game_tree);
 
-	cout<<"Number of sticks removed by player 1 (AI): "<<remove_sticks<<"\n";
+	cout<<"Number of sticks removed by AI: "<<remove_sticks<<"\n";
 
 	platform->remaining_sticks -= remove_sticks;
 }
