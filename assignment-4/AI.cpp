@@ -125,8 +125,14 @@ node* create_game_tree(game* platform)
 	head->two=NULL;
 	head->three=NULL;
 
-
-	head = dfs(head);
+	if(platform->remaining_sticks>1)
+	{
+		head = dfs(head);
+	}
+	else
+	{
+		head->utility = -1;
+	}
 
 	return head;
 }
@@ -334,6 +340,8 @@ int sticks_to_be_removed(node* head)
 			return 3;
 		}
 	}
+
+	return 1;
 }
 
 void evaluate_utility(node* head)

@@ -209,6 +209,7 @@ int main()
 
 	while(platform.remaining_sticks!=0)
 	{
+		cout<<"Remaining Sticks: "<<platform.remaining_sticks<<"\n";
 		call_player(platform.turn_number,&platform);
 		increment_turn(&platform);
 	}
