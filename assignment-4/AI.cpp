@@ -265,17 +265,17 @@ void evaluate_game_tree(node* head)
 
 			if(head->two!=NULL)
 			{
-				if(head->utility < head->one->utility)
+				if(head->utility < head->two->utility)
 				{
-					head->utility = head->one->utility;
+					head->utility = head->two->utility;
 				}
 			}
 
 			if(head->three!=NULL)
 			{
-				if(head->utility < head->one->utility)
+				if(head->utility < head->three->utility)
 				{
-					head->utility = head->one->utility;
+					head->utility = head->three->utility;
 				}
 			}
 		}
@@ -353,7 +353,7 @@ void AI(game* platform)
 
 	game_tree = create_game_tree(platform);
 
-	display_game_tree(game_tree);
+	//display_game_tree(game_tree);
 
 	evaluate_utility(game_tree);
 
