@@ -17,7 +17,6 @@ typedef struct node node;
 node* dfs(node* head)
 {
 	
-
 	if(head->arena.remaining_sticks >= 1)
 	{
 		node* temp;
@@ -39,13 +38,38 @@ node* dfs(node* head)
 			temp->min_max_mode=0;
 		}
 
-		temp->utility = -100;
+
+		temp->utility = -100;    
 
 		head->one = temp;
 
 		temp->arena.remaining_sticks--;
 
-		head->one = dfs(head->one);
+		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 1)
+		{	
+			temp->utility = 1;
+		}
+
+		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 0)
+		{
+			temp->utility = -1;
+		}
+
+
+		if(temp->arena.remaining_sticks!=0)
+		{
+			head->one = dfs(head->one);
+		}
+		else
+		{
+			free(temp);
+			head->one=NULL;
+		}
+	}
+
+	if(head->one!=NULL)
+	{
+		head->utility = head->one->utility;
 	}
 
 	if(head->arena.remaining_sticks >= 2)
@@ -74,7 +98,60 @@ node* dfs(node* head)
 		
 		temp1->arena.remaining_sticks -= 2;
 
-		head->two = dfs(head->two);
+		if((temp1->arena.remaining_sticks == 1) && temp1->min_max_mode == 1)
+		{	
+			temp1->utility = 1;
+		}
+
+		if((temp1->arena.remaining_sticks == 1) && temp1->min_max_mode == 0)
+		{
+			temp1->utility = -1;
+		}
+
+		int flag=1;
+
+		if(head->min_max_mode==0)
+		{
+			if(head->utility == 1)
+			{
+				flag=0;
+			}
+		}
+		else
+		{
+			if(head->utility == -1)
+			{
+				flag=0;
+			}
+		}
+		if((temp1->arena.remaining_sticks!=0) && (flag==1))
+		{
+
+			head->two = dfs(head->two);
+		}
+		else
+		{
+			free(temp1);
+			head->two = NULL;
+		}
+	}
+
+	if(head->two!=NULL)
+	{
+		if(head->min_max_mode==0)
+		{
+			if(head->two->utility > head->utility)
+			{
+				head->utility = head->two->utility;
+			}
+		}
+		else
+		{
+			if(head->two->utility < head->utility)
+			{
+				head->utility = head->two->utility;
+			}
+		}
 	}
 
 	if(head->arena.remaining_sticks >= 3)
@@ -103,7 +180,60 @@ node* dfs(node* head)
 
 		temp2->arena.remaining_sticks -= 3;
 
-		head->three = dfs(head->three);
+		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 1)
+		{	
+			temp2->utility = 1;
+		}
+
+		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 0)
+		{
+			temp2->utility = -1;
+		}
+
+		int flag=1;
+
+		if(head->min_max_mode==0)
+		{
+			if(head->utility == 1)
+			{
+				flag=0;
+			}
+		}
+		else
+		{
+			if(head->utility == -1)
+			{
+				flag=0;
+			}
+		}
+
+		if((temp2->arena.remaining_sticks!=0) && (flag==1))
+		{
+			head->three = dfs(head->three);
+		}
+		else
+		{
+			free(temp2);
+			head->three=NULL;
+		}
+	}
+
+	if(head->three!=NULL)
+	{
+		if(head->min_max_mode==0)
+		{
+			if(head->three->utility > head->utility)
+			{
+				head->utility = head->three->utility;
+			}
+		}
+		else
+		{
+			if(head->three->utility < head->utility)
+			{
+				head->utility = head->three->utility;
+			}
+		}
 	}
 
 	return head;
@@ -247,16 +377,128 @@ void evaluate_game_tree(node* head)
 		evaluate_game_tree(head->one);
 	}
 
-	if(head->two!=NULL)
+	if(head->arena.remaining_sticks!=1)
+	{
+		if(head->min_max_mode==0)
+		{
+			if(head->one!=NULL)
+			{
+				if(head->utility < head->one->utility)
+				{
+					head->utility = head->one->utility;
+				}
+			}
+		}
+
+		if(head->min_max_mode == 1)
+		{
+			if(head->one!=NULL)
+			{
+				if((head->utility > head->one->utility) || head->utility == -100)
+				{
+					head->utility = head->one->utility;
+				}
+			}
+		}
+	}
+
+	int temp=1;
+	if(head->min_max_mode == 0)
+	{
+		if(head->utility == 1)
+		{
+			temp=0;
+		}
+	}
+
+	if(head->min_max_mode == 1)
+	{
+		if(head->utility == -1)
+		{
+			temp=0;
+		}
+	}
+
+	if((head->two!=NULL) && (temp==1))
 	{
 		evaluate_game_tree(head->two);
 	}
 
-	if(head->three!=NULL)
+	if(head->arena.remaining_sticks!=1)
+	{
+		if(head->min_max_mode==0)
+		{
+			if(head->two!=NULL)
+			{
+				if(head->utility < head->two->utility)
+				{
+					head->utility = head->two->utility;
+				}
+			}
+		}
+
+		if(head->min_max_mode==1)
+		{
+			if(head->two!=NULL)
+			{
+				if((head->utility > head->two->utility) || head->utility == -100)
+				{
+					head->utility = head->two->utility;
+				}
+			}
+		}
+	}
+
+
+	int temp1=1;
+
+	if(head->min_max_mode==0)
+	{
+		if(head->utility == 1)
+		{
+			temp1=0;
+		}
+	}
+
+	if(head->min_max_mode==1)
+	{
+		if(head->utility == -1)
+		{
+			temp1=0;
+		}
+	}
+
+	if((head->three!=NULL) && (temp1==1))
 	{
 		evaluate_game_tree(head->three);
 	}
 
+	if(head->arena.remaining_sticks!=1)
+	{
+		if(head->min_max_mode==0)
+		{
+ 			if(head->three!=NULL)
+			{
+				if(head->utility < head->three->utility)
+				{
+					head->utility = head->three->utility;
+				}
+			}
+		}
+
+		if(head->min_max_mode==1)
+		{
+			if(head->three!=NULL)
+			{
+				if((head->utility > head->three->utility) || head->utility == -100)
+				{
+					head->utility = head->three->utility;
+				}
+			}
+		}
+	}
+
+	/*
 	if(head->arena.remaining_sticks!=1)
 	{
 		if(head->min_max_mode == 0)
@@ -313,6 +555,8 @@ void evaluate_game_tree(node* head)
 			}
 		}
 	}
+
+	*/
 }
 
 int sticks_to_be_removed(node* head)
@@ -329,7 +573,7 @@ int sticks_to_be_removed(node* head)
 	{
 		if(head->utility == head->two->utility)
 		{
-			return 2;
+		 			return 2;
 		}
 	}
 
@@ -346,11 +590,17 @@ int sticks_to_be_removed(node* head)
 
 void evaluate_utility(node* head)
 {
-	cleanup(head);
+	//cleanup(head);
 
-	assign_leaf_utility(head);
+	//cout<<"Done Cleanup....\n";
 
-	evaluate_game_tree(head);
+	//assign_leaf_utility(head);
+
+	//cout<<"Done leaf assignment...\n";
+
+	//evaluate_game_tree(head);
+
+	//cout<<"Done Evaluation....\n";
 }
 
 
@@ -363,7 +613,7 @@ void AI(game* platform)
 
 	//display_game_tree(game_tree);
 
-	evaluate_utility(game_tree);
+	//evaluate_utility(game_tree);
 
 	//display_game_tree(game_tree);
 

@@ -51,7 +51,7 @@ void call_player(int turn_number,game* platform)
 						while(1)
 						{
 							cin>>temp;
-							if(temp > platform->remaining_sticks)
+							if(temp > platform->remaining_sticks || (temp > 3))
 							{
 								cout<<"Can't remove "<<temp<<" sticks, not available\n";
 								cout<<"Please remove correct number of sticks!\n";
@@ -87,7 +87,7 @@ void call_player(int turn_number,game* platform)
 							while(1)
 							{
 								cin>>temp;
-								if(temp > platform->remaining_sticks)
+								if(temp > platform->remaining_sticks || (temp > 3))
 								{
 									cout<<"Can't remove "<<temp<<" sticks, not available\n";
 									cout<<"Please remove correct number of sticks!\n";
