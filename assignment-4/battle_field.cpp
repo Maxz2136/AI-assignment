@@ -23,7 +23,7 @@ int toss()
 	}
 }
 
-void call_player(int turn_number,game* platform)
+int call_player(int turn_number,game* platform)
 {
 	turn_number = turn_number % 2;
 
@@ -34,15 +34,25 @@ void call_player(int turn_number,game* platform)
 				if(platform->first_turn_taken_by==1)
 				{
 					cout<<"Player1: ";
-					AI(platform);
+					int temp=AI(platform);
 					platform->current_turn=1;
+					if(temp==0)
+					{
+						return 0;
+					}
+					else
+					{
+						return 1;
+					}
 				}
 				else
 				{
+					int temp1;
+
 					if(platform->game_mode==1)
 					{
 						cout<<"Player1: ";
-						AI(platform);
+						temp1=AI(platform);
 					}
 					else
 					{
@@ -63,8 +73,20 @@ void call_player(int turn_number,game* platform)
 								break;
 							}
 						}
+
+						temp1=1;
 					}
+
 					platform->current_turn=2;
+
+					if(temp1==0)
+					{
+						return 0;
+					}
+					else
+					{
+						return 1;
+					}
 				}
 			
 		}
@@ -73,12 +95,13 @@ void call_player(int turn_number,game* platform)
 
 		case 0: {
 
+					int temp1;
 					if(platform->first_turn_taken_by==1)
 					{
 						if(platform->game_mode==1)
 						{
 							cout<<"Player2: ";
-							AI(platform);
+							temp1=AI(platform);
 						}
 						else
 						{
@@ -99,15 +122,33 @@ void call_player(int turn_number,game* platform)
 									break;
 								}
 							}
+
+							temp1 = 1;
 						}
 
 						platform->current_turn=2;
+						if(temp1==0)
+						{
+							return 0;
+						}
+						else
+						{
+							return 1;
+						}
 					}
 					else
 					{
 						cout<<"Player2: ";
-						AI(platform);
+						int temp=AI(platform);
 						platform->current_turn=1;
+						if(temp==0)
+						{
+							return 0;
+						}
+						else
+						{
+							return 1;
+						}
 					}
 
 		} 
@@ -210,17 +251,34 @@ int main()
 	while(platform.remaining_sticks!=0)
 	{
 		cout<<"Remaining Sticks: "<<platform.remaining_sticks<<"\n";
-		call_player(platform.turn_number,&platform);
+		int terminate=call_player(platform.turn_number,&platform);
+		if(terminate==0 && platform.game_mode==1)
+		{
+			break;
+		}
 		increment_turn(&platform);
 	}
 
 	if(platform.current_turn==platform.first_turn_taken_by)
 	{
+		if(platform.remaining_sticks==0)
 		cout<<"Second Player Wins\n";
+		else
+		{
+			 cout<<"First Player Resigns (Accepts Defeat)\n";
+			 cout<<"Second Player Wins\n";
+		}
+
 	}
 	else
-	{
+	{	
+		if(platform.remaining_sticks==0)
 		cout<<"First Player Wins\n";
+		else
+		{
+			cout<<"Second Player Resigns (Accept Defeat)\n";
+			cout<<"First Player Wins\n";
+		}
 	}
 
 	return 0;

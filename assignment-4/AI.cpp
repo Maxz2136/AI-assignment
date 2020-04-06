@@ -16,60 +16,58 @@ typedef struct node node;
 
 node* dfs(node* head)
 {
-	
-	if(head->arena.remaining_sticks >= 1)
+	if(head->arena.remaining_sticks >= 3)
 	{
-		node* temp;
+		node* temp2;
+		temp2 = (node*) malloc(sizeof(node));
 
-		temp = (node*) malloc(sizeof(node));
+		temp2->one = NULL;
+		temp2->two = NULL;
+		temp2->three = NULL;
 
-		temp->arena = head->arena;
+		temp2->arena = head->arena;
 
-		temp->one =NULL;
-		temp->two = NULL;
-		temp->three = NULL;
+		head->three = temp2;
 
-		if(head->min_max_mode==0)
+		if(head->min_max_mode == 0)
 		{
-			temp->min_max_mode=1;
+			temp2->min_max_mode = 1;
 		}
 		else
 		{
-			temp->min_max_mode=0;
+			temp2->min_max_mode = 0;
 		}
 
+		temp2->utility = -100;
 
-		temp->utility = -100;    
+		temp2->arena.remaining_sticks -= 3;
 
-		head->one = temp;
-
-		temp->arena.remaining_sticks--;
-
-		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 1)
+		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 1)
 		{	
-			temp->utility = 1;
+			temp2->utility = 1;
 		}
 
-		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 0)
+		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 0)
 		{
-			temp->utility = -1;
+			temp2->utility = -1;
 		}
 
-
-		if(temp->arena.remaining_sticks!=0)
+		
+		if((temp2->arena.remaining_sticks!=0))
 		{
-			head->one = dfs(head->one);
+			head->three = dfs(head->three);
 		}
 		else
 		{
-			free(temp);
-			head->one=NULL;
+			free(temp2);
+			head->three=NULL;
 		}
 	}
 
-	if(head->one!=NULL)
+	
+	if(head->three!=NULL)
 	{
-		head->utility = head->one->utility;
+		head->utility = head->three->utility;
 	}
 
 	if(head->arena.remaining_sticks >= 2)
@@ -154,40 +152,42 @@ node* dfs(node* head)
 		}
 	}
 
-	if(head->arena.remaining_sticks >= 3)
+	if(head->arena.remaining_sticks >= 1)
 	{
-		node* temp2;
-		temp2 = (node*) malloc(sizeof(node));
+		node* temp;
 
-		temp2->one = NULL;
-		temp2->two = NULL;
-		temp2->three = NULL;
+		temp = (node*) malloc(sizeof(node));
 
-		temp2->arena = head->arena;
+		temp->arena = head->arena;
 
-		head->three = temp2;
+		temp->one =NULL;
+		temp->two = NULL;
+		temp->three = NULL;
 
-		if(head->min_max_mode == 0)
+		if(head->min_max_mode==0)
 		{
-			temp2->min_max_mode = 1;
+			temp->min_max_mode=1;
 		}
 		else
 		{
-			temp2->min_max_mode = 0;
+			temp->min_max_mode=0;
 		}
 
-		temp2->utility = -100;
 
-		temp2->arena.remaining_sticks -= 3;
+		temp->utility = -100;    
 
-		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 1)
+		head->one = temp;
+
+		temp->arena.remaining_sticks--;
+
+		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 1)
 		{	
-			temp2->utility = 1;
+			temp->utility = 1;
 		}
 
-		if((temp2->arena.remaining_sticks == 1) && temp2->min_max_mode == 0)
+		if((temp->arena.remaining_sticks == 1) && temp->min_max_mode == 0)
 		{
-			temp2->utility = -1;
+			temp->utility = -1;
 		}
 
 		int flag=1;
@@ -207,31 +207,32 @@ node* dfs(node* head)
 			}
 		}
 
-		if((temp2->arena.remaining_sticks!=0) && (flag==1))
+
+		if(temp->arena.remaining_sticks!=0 && (flag==1))
 		{
-			head->three = dfs(head->three);
+			head->one = dfs(head->one);
 		}
 		else
 		{
-			free(temp2);
-			head->three=NULL;
+			free(temp);
+			head->one=NULL;
 		}
 	}
 
-	if(head->three!=NULL)
+	if(head->one!=NULL)
 	{
 		if(head->min_max_mode==0)
 		{
-			if(head->three->utility > head->utility)
+			if(head->one->utility > head->utility)
 			{
-				head->utility = head->three->utility;
+				head->utility = head->one->utility;
 			}
 		}
 		else
 		{
-			if(head->three->utility < head->utility)
+			if(head->one->utility < head->utility)
 			{
-				head->utility = head->three->utility;
+				head->utility = head->one->utility;
 			}
 		}
 	}
@@ -561,10 +562,13 @@ void evaluate_game_tree(node* head)
 
 int sticks_to_be_removed(node* head)
 { 
+
 	if(head->one!=NULL)
 	{
+
 		if(head->utility == head->one->utility)
 		{
+
 			return 1;
 		}
 	}
@@ -603,9 +607,37 @@ void evaluate_utility(node* head)
 	//cout<<"Done Evaluation....\n";
 }
 
+int terminate_decision(node* head)
+{
+	int flag=0;
+	if(head->one!=NULL)
+	{
+		if(head->one->utility==1)
+		{
+			flag=1;
+		}
+	}
 
+	if(head->two!=NULL)
+	{
+		if(head->two->utility==1)
+		{
+			flag=1;
+		}
+	}
 
-void AI(game* platform)
+	if(head->three!=NULL)
+	{
+		if(head->three->utility==1)
+		{
+			flag=1;
+		}
+	}
+
+	return flag;
+}
+
+int AI(game* platform)
 {
 	node* game_tree;
 
@@ -615,11 +647,17 @@ void AI(game* platform)
 
 	//evaluate_utility(game_tree);
 
-	//display_game_tree(game_tree);
+	display_game_tree(game_tree);
 
-	int remove_sticks = sticks_to_be_removed(game_tree);
+	int remove_sticks=sticks_to_be_removed(game_tree);
+	int terminate = terminate_decision(game_tree);
+	if(terminate == 0 && platform->game_mode==1	)
+	{
+		return 0;
+	}
 
 	cout<<"Number of sticks removed by AI: "<<remove_sticks<<"\n";
-
 	platform->remaining_sticks -= remove_sticks;
+
+	return 1;
 }
