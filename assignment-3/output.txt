@@ -7,7 +7,7 @@
 Calculating fitness value.....
  Showing fitness value
 64 37 33 33 33
-crossover point is 0
+crossover point is 0   // Crossover point is the index, if 0, it means the first student is the crossover point. 0 index based array
 Crossover Complete...
 1 0 0
 1 0 1
