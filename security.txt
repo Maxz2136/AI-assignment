@@ -1,6 +1,0 @@
-rebase is confusing
-Louvre is in France
-Louvre is in Paris
-Louvre est '`'a Paris
-C'est francais oui?
-Oui, comment tu t'appelles?
