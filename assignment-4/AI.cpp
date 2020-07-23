@@ -647,7 +647,7 @@ int AI(game* platform)
 
 	//evaluate_utility(game_tree);
 
-	display_game_tree(game_tree);
+//	display_game_tree(game_tree);
 
 	int remove_sticks=sticks_to_be_removed(game_tree);
 	int terminate = terminate_decision(game_tree);
